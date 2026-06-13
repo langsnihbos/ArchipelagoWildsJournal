@@ -1,0 +1,668 @@
+/* ==========================================================================
+   1. GLOBAL SYSTEM VARIABLES & FONTS
+   ========================================================================== */
+:root {
+    --primary-color: #1b4d3e;      /* Hijau Hutan Premium */
+    --accent-color: #cda250;       /* Gold Pasir/Petualangan */
+    --text-dark: #1e272e;          /* Hitam Charcoal */
+    --text-light: #57606f;         /* Abu-abu teks panjang */
+    --bg-base: #f9fbf9;            /* Putih pudar natural */
+    --navbar-height: 80px;
+    --transition-smooth: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.7s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-base);
+    color: var(--text-dark);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden; /* Dikunci agar efek geser slide total bekerja sempurna */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar untuk bagian dalam slide yang panjang */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.02);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(27, 77, 62, 0.2);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* ==========================================================================
+   2. NAVBAR DESIGN (RICH & FLOATING LOOK)
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--navbar-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 9999;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: var(--primary-color);
+    text-transform: uppercase;
+}
+
+.sub-brand {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 8px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   3. MULTI-SLIDE WORK ENGINE (CORE SPA EFFECT)
+   ========================================================================== */
+.slider-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.slide {
+    position: absolute;
+    top: var(--navbar-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--navbar-height));
+    padding: 60px 6%;
+    overflow-y: auto; /* Memungkinkan isi tulisan panjang di-scroll ke bawah */
+    -webkit-overflow-scrolling: touch;
+    
+    /* State Tersembunyi (Dorong penuh ke sisi kanan layar) */
+    opacity: 0;
+    transform: translateX(100%);
+    transition: var(--transition-smooth);
+    pointer-events: none;
+}
+
+/* Pemicu Kelas Aktif via JavaScript */
+.slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+/* ==========================================================================
+   4. SLIDE INTERIOR DESIGNS (HERO, BLOG, GALLERY, ABOUT)
+   ========================================================================== */
+
+/* --- SLIDE 1: HOME/HERO SYSTEM --- */
+#home {
+    background: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600') no-repeat center center/cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 120px; /* Ruang untuk stats di bawah */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(11, 36, 28, 0.9) 30%, rgba(0,0,0,0.3));
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 780px;
+    color: #ffffff;
+}
+
+.hero-badge {
+    display: inline-block;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 25px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.hero-content p {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    opacity: 0.85;
+    margin-bottom: 40px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-main {
+    padding: 16px 32px;
+    background-color: var(--accent-color);
+    color: #111;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-main:hover {
+    background-color: #bfa043;
+}
+
+.btn-secondary {
+    padding: 16px 32px;
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* Panel Statistik Melayang di Home */
+.hero-footer-stats {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(11, 36, 28, 0.95);
+    z-index: 2;
+    display: flex;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 25px 6%;
+}
+
+.stat-box {
+    flex: 1;
+    color: #fff;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    padding-left: 20px;
+}
+
+.stat-box:last-child {
+    border-right: none;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent-color);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.7);
+}
+
+/* --- FORMAT ELEMEN KONTEN MEGA (STRUKTUR CONTAINER) --- */
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+}
+
+.section-header-mega {
+    margin-bottom: 50px;
+}
+
+.section-header-mega .sub-title {
+    color: var(--accent-color);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.section-header-mega h2 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    font-weight: 800;
+    margin-top: 5px;
+}
+
+.header-line {
+    width: 60px;
+    height: 4px;
+    background-color: var(--accent-color);
+    margin-top: 15px;
+}
+
+/* --- GRID ARTIKEL PANJANG --- */
+.article-mega-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dua kolom simetris di Desktop */
+    gap: 40px;
+}
+
+.blog-card {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+.blog-img-wrapper {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.blog-img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.blog-card:hover .blog-img {
+    transform: scale(1.04);
+}
+
+.blog-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #ffffff;
+    color: var(--primary-color);
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.blog-body {
+    padding: 35px;
+}
+
+.blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.blog-meta .dot {
+    width: 4px;
+    height: 4px;
+    background: var(--text-light);
+    border-radius: 50%;
+}
+
+.blog-body h3 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    line-height: 1.35;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.blog-excerpt {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-light);
+    margin-bottom: 25px;
+}
+
+.blog-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    padding-top: 20px;
+}
+
+.reading-time {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.btn-text-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.btn-text-link:hover {
+    text-decoration: underline;
+}
+
+/* --- PREMIUM GALLERY (MASONRY GRID DISPLAY) --- */
+.gallery-premium-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-auto-rows: 260px;
+    gap: 20px;
+}
+
+.gallery-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.gallery-card.tall {
+    grid-row: span 2; /* Membuat boks gambar memanjang vertikal ke bawah */
+}
+
+.gallery-img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.gallery-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 40%, rgba(0,0,0,0));
+    color: #ffffff;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+
+.gallery-card:hover .gallery-img {
+    transform: scale(1.05);
+}
+
+.gallery-card:hover .gallery-info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gallery-info h4 {
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+    color: var(--accent-color);
+}
+
+.gallery-info p {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
+/* --- SLIDE 4: TENTANG KAMI MULTI-COLUMN INTERIOR --- */
+.about-mega-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 50px;
+}
+
+.about-main-text h2 {
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+
+.about-main-text p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+.vision-mission-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.vm-item {
+    background: #fff;
+    padding: 25px;
+    border-radius: 6px;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+}
+
+.vm-item h5 {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.vm-item p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Sidebar Info Box */
+.about-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.sidebar-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.sidebar-box h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    border-bottom: 2px solid rgba(0,0,0,0.05);
+    padding-bottom: 10px;
+}
+
+.sidebar-box p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.sidebar-box.status-green {
+    background-color: #1b4d3e;
+    color: #ffffff;
+}
+
+.sidebar-box.status-green h4 {
+    color: var(--accent-color);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-box ul {
+    list-style: none;
+}
+
+.sidebar-box ul li {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ==========================================================================
+   5. ULTRA RESPONSIVE ADAPTATION ENGINE (OPTIMALISASI HP SCREEN)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .article-mega-grid {
+        grid-template-columns: 1fr; /* 1 Kolom penuh di tablet/HP */
+    }
+    .about-mega-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --navbar-height: 70px;
+    }
+
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .brand {
+        font-size: 1rem;
+    }
+
+    .sub-brand {
+        font-size: 0.65rem;
+    }
+
+    .nav-links {
+        gap: 2px;
+    }
+
+    .nav-links a {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+
+    .slide {
+        padding: 40px 4%;
+    }
+
+    /* Modifikasi Tampilan Hero Home di HP */
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero-footer-stats {
+        display: none; /* Menyembunyikan statistik bawah di HP agar layar lapang */
+    }
+
+    #home {
+        padding-bottom: 40px;
+    }
+
+    /* Modifikasi Artikel & Galeri di HP */
+    .section-header-mega h2 {
+        font-size: 1.8rem;
+    }
+
+    .blog-body {
+        padding: 20px;
+    }
+
+    .blog-img-wrapper {
+        height: 200px;
+    }
+
+    .gallery-premium-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 240px;
+    }
+
+    .gallery-card.tall {
+        grid-row: auto;
+    }
+
+    .gallery-info {
+        opacity: 1; /* Di HP, info foto langsung muncul tanpa nunggu kursor hover */
+        background: linear-gradient(to top, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0));
+        padding: 15px;
+    }
+
+    .vision-mission-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
