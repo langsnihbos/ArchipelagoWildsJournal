@@ -1,0 +1,2 @@
+# ArchipelagoWildsJournal
+web
